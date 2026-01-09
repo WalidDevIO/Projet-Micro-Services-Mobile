@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: AuthApi
+  datasource:
+    url: jdbc:h2:mem:authdb;mode=oracle
+    username: auth
+    password: htua # Note: Not used in production
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  cloud:
+    compatibility-verifier:
+      enabled: false
