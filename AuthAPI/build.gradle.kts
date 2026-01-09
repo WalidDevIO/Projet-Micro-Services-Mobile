@@ -40,7 +40,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     
     // Database
-    implementation("com.h2database:h2:2.4.240")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.3.2")
     
     // Jackson
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.20")

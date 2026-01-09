@@ -17,10 +17,10 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final static String SQL_INSERT_ACCOUNT = "INSERT INTO account (EMAIL, USERNAME, PASSWORD, FIRSTNAME, LASTNAME)" +
-            " VALUES (:email, :username, :password, :firstname, :lastname);";
+    private final static String SQL_INSERT_ACCOUNT = "INSERT INTO ACCOUNT (EMAIL, USERNAME, PASSWORD, FIRSTNAME, LASTNAME, ADMIN)" +
+            " VALUES (:email, :username, :password, :firstname, :lastname, :admin);";
 
-    private final static String SQL_SELECT_ACCOUNT = "SELECT * FROM account WHERE username = :username;";
+    private final static String SQL_SELECT_ACCOUNT = "SELECT * FROM ACCOUNT WHERE USERNAME = :username;";
 
     public UserRepositoryDto addUser(UserRepositoryDto user) {
         Map<String, Object> params = new HashMap<>();
@@ -29,6 +29,7 @@ public class UserRepository {
         params.put("password", user.getPassword());
         params.put("lastname", user.getLastName());
         params.put("firstname", user.getFirstName());
+        params.put("admin", user.isAdmin() ? 1 : 0); // TINYINT(1) -> 0 ou 1
         jdbcTemplate.update(SQL_INSERT_ACCOUNT, params);
         return user;
     }
@@ -39,11 +40,13 @@ public class UserRepository {
         try {
             return jdbcTemplate.queryForObject(SQL_SELECT_ACCOUNT, params, (r, s) -> {
                 UserRepositoryDto user = new UserRepositoryDto();
+                user.setId(String.valueOf(r.getInt("ID")));
                 user.setEmail(r.getString("EMAIL"));
                 user.setUsername(r.getString("USERNAME"));
                 user.setPassword(r.getString("PASSWORD"));
                 user.setLastName(r.getString("LASTNAME"));
                 user.setFirstName(r.getString("FIRSTNAME"));
+                user.setAdmin(r.getInt("ADMIN") == 1); // 1 = true, 0 = false
                 return user;
             });
         } catch (Exception e) {

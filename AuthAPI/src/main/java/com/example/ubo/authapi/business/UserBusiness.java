@@ -1,5 +1,6 @@
 package com.example.ubo.authapi.business;
 
+import com.example.ubo.authapi.dto.UserRepositoryDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -95,7 +96,10 @@ public class UserBusiness {
         CheckResponse response = new CheckResponse();
         if (jwtUtil.validateToken(token)) {
             response.setValid(true);
-            response.setUsername(jwtUtil.getUsername(token));
+            UserRepositoryDto user = userRepository.getAccountByUsername(jwtUtil.getUsername(token));
+            response.setUsername(user.getUsername());
+            response.setAdmin(user.isAdmin());
+            response.setId(user.getId());
         } else {
             response.setValid(false);
         }

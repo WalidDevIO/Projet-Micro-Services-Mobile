@@ -6,6 +6,8 @@ public class UserRepositoryDto {
     private String password;
     private String lastName;
     private String firstName;
+    private boolean admin;
+    private String id;
 
     public UserRepositoryDto() {
     }
@@ -38,6 +40,14 @@ public class UserRepositoryDto {
         return firstName;
     }
 
+    public Boolean isAdmin() {
+        return admin;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -56,6 +66,14 @@ public class UserRepositoryDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public UserRepositoryDto username(String username) {

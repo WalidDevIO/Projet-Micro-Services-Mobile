@@ -107,7 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /check:
+  /verify-token:
     get:
       tags:
         - Validation
@@ -133,10 +133,10 @@ paths:
 components:
   securitySchemes:
     BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: Token JWT au format "Bearer {token}"
+      type: apiKey
+      in: header
+      name: Authentication
+      description: Token JWT
 
   schemas:
     RegisterRequest:
@@ -240,10 +240,18 @@ components:
           type: boolean
           description: Indique si le token est valide
           example: true
+        id:
+          type: string
+          description: Identifiant de l'utilisateur
+          example: "123"
         username:
           type: string
           description: Nom d'utilisateur associé au token
           example: waldo_dev
+        admin:
+          type: boolean
+          description: Indique si l'utilisateur est administrateur
+          example: false
 
     User:
       type: object
