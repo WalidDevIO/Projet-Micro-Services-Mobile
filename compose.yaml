@@ -1,0 +1,15 @@
+services:
+  db:
+    image: mariadb:latest
+    container_name: ecomm-mariadb
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ecomm_mariadb_data:/var/lib/mysql
+      - ./conf/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  ecomm_mariadb_data:
