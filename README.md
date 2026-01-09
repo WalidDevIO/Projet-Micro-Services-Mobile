@@ -1,3 +1,9 @@
+# Précision sur le code
+
+Les API ne sont pas du Java très propre (Code boilerplate, Requete SQL, POJO)
+
+Cela est dû aux consignes reçues par notre enseignant pour ce projet, le cours avait pour objectif secondaire de nous montrer comment les libs comme lombok, ou hibernate fonctionnent sous le capot, nous n'avions donc pas le droit de les utiliser
+
 # Cahier des Charges - Application E-Commerce (Version non définitive)
 
 ## 1. Contexte et Objectifs
@@ -291,27 +297,15 @@ CREATE TABLE articles (
 );
 ```
 
-#### Table : carts
-```sql
-CREATE TABLE carts (
-  id BIGSERIAL PRIMARY KEY,
-  user_id BIGINT UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-```
-
 #### Table : cart_items
 ```sql
 CREATE TABLE cart_items (
   id BIGSERIAL PRIMARY KEY,
-  cart_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
   article_id BIGINT NOT NULL,
   quantity INTEGER NOT NULL,
   price_at_add DECIMAL(10, 2) NOT NULL, -- prix au moment de l'ajout
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
   FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE,
   UNIQUE(cart_id, article_id)
 );
