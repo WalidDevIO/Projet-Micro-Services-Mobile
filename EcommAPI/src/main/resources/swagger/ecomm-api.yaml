@@ -1,0 +1,765 @@
+openapi: 3.0.0
+x-stoplight:
+  id: 8bkdnvb02cr8e
+info:
+  title: E-Commerce API
+  description: 'API de gestion d''un système e-commerce avec articles, catégories et panier'
+  version: 1.0.0
+  contact:
+    name: Waldo
+    email: contact@walidlab.dev
+    url: 'https://walidlab.dev'
+  license:
+    name: MIT
+    url: 'http://mit-license.org/'
+  termsOfService: ''
+servers:
+  - url: 'http://localhost:8080/api/v1'
+    description: Serveur de développement
+tags:
+  - name: Admin
+    description: Routes d'administration
+  - name: Articles
+    description: 'Gestion des articles (lecture publique, écriture admin)'
+  - name: Cart
+    description: Gestion du panier utilisateur
+  - name: Categories
+    description: 'Gestion des catégories (lecture publique, écriture admin)'
+security:
+  - BearerAuth: []
+paths:
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Liste toutes les catégories
+      description: Récupère la liste complète des catégories disponibles
+      security: []
+      responses:
+        '200':
+          description: Liste des catégories récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      x-stoplight:
+        id: vkchncmrskxaa
+      operationId: getCategories
+  '/categories/{id}':
+    get:
+      tags:
+        - Categories
+      summary: Récupère une catégorie par ID
+      description: Récupère les détails d'une catégorie spécifique
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Catégorie récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-stoplight:
+        id: ti2t26fva71ef
+      operationId: getCategory
+  /admin/categories:
+    post:
+      tags:
+        - Admin
+        - Categories
+      summary: Créer une nouvelle catégorie
+      description: Crée une nouvelle catégorie (réservé aux administrateurs)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCreate'
+      responses:
+        '201':
+          description: Catégorie créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-stoplight:
+        id: 43a12r64bdya7
+      operationId: createCategory
+  '/admin/categories/{id}':
+    put:
+      tags:
+        - Admin
+        - Categories
+      summary: Modifier une catégorie
+      description: Met à jour une catégorie existante (réservé aux administrateurs)
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+      responses:
+        '200':
+          description: Catégorie modifiée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-stoplight:
+        id: mznbcf8beo5s8
+      operationId: updateCategory
+    delete:
+      tags:
+        - Admin
+        - Categories
+      summary: Supprimer une catégorie
+      description: Supprime une catégorie (réservé aux administrateurs)
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204':
+          description: Catégorie supprimée avec succès
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-stoplight:
+        id: 2m2k5saixz3ok
+      operationId: deleteCategory
+  /articles:
+    get:
+      tags:
+        - Articles
+      summary: Liste tous les articles
+      description: 'Récupère la liste complète des articles, avec filtrage optionnel par catégorie'
+      security: []
+      parameters:
+        - name: categoryId
+          in: query
+          description: Filtrer les articles par ID de catégorie
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des articles récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      x-stoplight:
+        id: a0vncwa3e72bh
+      operationId: getArticles
+  '/articles/{id}':
+    get:
+      tags:
+        - Articles
+      summary: Récupère un article par ID
+      description: Récupère les détails d'un article spécifique
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Article récupéré avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-stoplight:
+        id: 42zpxfcpsed2p
+      operationId: getArticle
+  /admin/articles:
+    post:
+      tags:
+        - Admin
+        - Articles
+      summary: Créer un nouvel article
+      description: Crée un nouvel article (réservé aux administrateurs)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleCreate'
+      responses:
+        '201':
+          description: Article créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-stoplight:
+        id: i38qni3mt8jkz
+      operationId: createArticle
+  '/admin/articles/{id}':
+    put:
+      tags:
+        - Admin
+        - Articles
+      summary: Modifier un article
+      description: Met à jour un article existant (réservé aux administrateurs)
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleUpdate'
+      responses:
+        '200':
+          description: Article modifié avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-stoplight:
+        id: c6v5g7hiyrhak
+      operationId: updateArticle
+    delete:
+      tags:
+        - Admin
+        - Articles
+      summary: Supprimer un article
+      description: Supprime un article (réservé aux administrateurs)
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204':
+          description: Article supprimé avec succès
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-stoplight:
+        id: tgmtk3ov4cxez
+      operationId: deleteArticle
+  /cart:
+    get:
+      tags:
+        - Cart
+      summary: Récupère le panier de l'utilisateur
+      description: Récupère tous les articles du panier de l'utilisateur connecté
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Panier récupéré avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CartItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-stoplight:
+        id: 7whl7hnwh3v9m
+      operationId: getCart
+    post:
+      tags:
+        - Cart
+      summary: Ajouter un article au panier
+      description: Ajoute un article au panier de l'utilisateur connecté
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemCreate'
+      responses:
+        '201':
+          description: Article ajouté au panier avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-stoplight:
+        id: bap2whrg9ar3s
+      operationId: addToCart
+    delete:
+      tags:
+        - Cart
+      summary: Vider le panier
+      description: Supprime tous les articles du panier de l'utilisateur connecté
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: Panier vidé avec succès
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-stoplight:
+        id: 4a0qxa9v9nk9r
+      operationId: clearCart
+  '/cart/{cartItemId}':
+    put:
+      tags:
+        - Cart
+      summary: Modifier un article du panier
+      description: Met à jour la quantité d'un article dans le panier
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cartItemId
+          in: path
+          required: true
+          description: ID de l'item dans le panier
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemUpdate'
+      responses:
+        '200':
+          description: Article du panier modifié avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-stoplight:
+        id: ti8uojmc3tr9f
+      operationId: updateCartItem
+    delete:
+      tags:
+        - Cart
+      summary: Supprimer un article du panier
+      description: Supprime un article spécifique du panier
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cartItemId
+          in: path
+          required: true
+          description: ID de l'item dans le panier
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Article supprimé du panier avec succès
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-stoplight:
+        id: 9sgnd5v6ezjpw
+      operationId: deleteCartItem
+components:
+  securitySchemes:
+    BearerAuth:
+      type: apiKey
+      in: header
+      name: Authentication
+      description: JWT token
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      description: Identifiant de la ressource
+      schema:
+        type: string
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: Code d'erreur numérique
+          example: 1
+        message:
+          type: string
+          description: Message d'erreur descriptif
+          example: Category not found
+      x-stoplight:
+        id: i4an4pnkzmprv
+    Category:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: Identifiant unique de la catégorie
+          example: '1'
+        name:
+          type: string
+          description: Nom de la catégorie
+          maxLength: 100
+          example: Électronique
+        description:
+          type: string
+          description: Description de la catégorie
+          nullable: true
+          example: Tous les produits électroniques
+        createdAt:
+          type: string
+          format: date-time
+          description: Date de création de la catégorie
+          example: '2024-01-15T10:30:00Z'
+      x-stoplight:
+        id: 5lwv8yswy954o
+    CategoryCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Nom de la catégorie
+          maxLength: 100
+          example: Électronique
+        description:
+          type: string
+          description: Description de la catégorie
+          nullable: true
+          example: Tous les produits électroniques
+      x-stoplight:
+        id: jsrtpsibmjbew
+    CategoryUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nom de la catégorie
+          maxLength: 100
+          example: Électronique
+        description:
+          type: string
+          description: Description de la catégorie
+          nullable: true
+          example: Tous les produits électroniques
+      x-stoplight:
+        id: ohegni1v1qhoz
+    Article:
+      type: object
+      required:
+        - id
+        - name
+        - price
+        - stock
+      properties:
+        id:
+          type: string
+          description: Identifiant unique de l'article
+          example: '1'
+        name:
+          type: string
+          description: Nom de l'article
+          maxLength: 255
+          example: Smartphone XYZ
+        description:
+          type: string
+          description: Description de l'article
+          nullable: true
+          example: Smartphone dernière génération avec écran OLED
+        price:
+          type: number
+          format: decimal
+          description: Prix de l'article
+          minimum: 0
+          example: 599.99
+        stock:
+          type: integer
+          description: Quantité en stock
+          minimum: 0
+          example: 50
+        categoryId:
+          type: string
+          description: ID de la catégorie parente
+          nullable: true
+          example: '1'
+        imageUrl:
+          type: string
+          description: URL de l'image de l'article
+          maxLength: 500
+          nullable: true
+          example: 'https://example.com/images/smartphone.jpg'
+        createdAt:
+          type: string
+          format: date-time
+          description: Date de création de l'article
+          example: '2024-01-15T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date de dernière modification
+          example: '2024-01-20T14:45:00Z'
+      x-stoplight:
+        id: r6ihkeer1kwhg
+    ArticleCreate:
+      type: object
+      required:
+        - name
+        - price
+        - stock
+      properties:
+        name:
+          type: string
+          description: Nom de l'article
+          maxLength: 255
+          example: Smartphone XYZ
+        description:
+          type: string
+          description: Description de l'article
+          nullable: true
+          example: Smartphone dernière génération avec écran OLED
+        price:
+          type: number
+          format: decimal
+          description: Prix de l'article
+          minimum: 0
+          example: 599.99
+        stock:
+          type: integer
+          description: Quantité en stock
+          minimum: 0
+          example: 50
+        categoryId:
+          type: string
+          description: ID de la catégorie parente
+          nullable: true
+          example: '1'
+        imageUrl:
+          type: string
+          description: URL de l'image de l'article
+          maxLength: 500
+          nullable: true
+          example: 'https://example.com/images/smartphone.jpg'
+      x-stoplight:
+        id: 7vavsyjgv2q2a
+    ArticleUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nom de l'article
+          maxLength: 255
+          example: Smartphone XYZ
+        description:
+          type: string
+          description: Description de l'article
+          nullable: true
+          example: Smartphone dernière génération avec écran OLED
+        price:
+          type: number
+          format: decimal
+          description: Prix de l'article
+          minimum: 0
+          example: 599.99
+        stock:
+          type: integer
+          description: Quantité en stock
+          minimum: 0
+          example: 50
+        categoryId:
+          type: string
+          description: ID de la catégorie parente
+          nullable: true
+          example: '1'
+        imageUrl:
+          type: string
+          description: URL de l'image de l'article
+          maxLength: 500
+          nullable: true
+          example: 'https://example.com/images/smartphone.jpg'
+      x-stoplight:
+        id: rom77foz8wq1p
+    CartItem:
+      type: object
+      required:
+        - id
+        - userId
+        - articleId
+        - quantity
+        - priceAtAdd
+      properties:
+        id:
+          type: string
+          description: Identifiant unique de l'item du panier
+          example: '1'
+        userId:
+          type: string
+          description: ID de l'utilisateur
+          example: '123'
+        articleId:
+          type: string
+          description: ID de l'article
+          example: '456'
+        quantity:
+          type: integer
+          description: Quantité de l'article dans le panier
+          minimum: 1
+          example: 2
+        priceAtAdd:
+          type: number
+          format: decimal
+          description: Prix de l'article au moment de l'ajout au panier
+          example: 599.99
+        createdAt:
+          type: string
+          format: date-time
+          description: Date d'ajout au panier
+          example: '2024-01-15T10:30:00Z'
+      x-stoplight:
+        id: hcigfkaqh26or
+    CartItemCreate:
+      type: object
+      required:
+        - articleId
+        - quantity
+      properties:
+        articleId:
+          type: string
+          description: ID de l'article à ajouter
+          example: '456'
+        quantity:
+          type: integer
+          description: Quantité à ajouter
+          minimum: 1
+          example: 2
+      x-stoplight:
+        id: 96c2hxwfzc8m9
+    CartItemUpdate:
+      type: object
+      required:
+        - quantity
+      properties:
+        quantity:
+          type: integer
+          description: Nouvelle quantité
+          minimum: 1
+          example: 5
+      x-stoplight:
+        id: md0jdr6cb2cos
+  responses:
+    BadRequest:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Invalid request parameters
+    Unauthorized:
+      description: Non authentifié
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Authentication required
+    Forbidden:
+      description: Accès interdit
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Admin privileges required
+    NotFound:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource not found
