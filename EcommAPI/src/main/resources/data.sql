@@ -1,0 +1,1 @@
+SELECT 1; -- TODO: Instantiate DB or use Hibernate with auto DDL

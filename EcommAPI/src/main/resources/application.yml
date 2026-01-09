@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: WeatherApi
+  datasource:
+    url: jdbc:h2:mem:weatherdb;mode=oracle
+    username: weather
+    password: rehtaew
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  cloud:
+    compatibility-verifier:
+      enabled: false
+auth:
+  api:
+    url: ${AUTH_API_URL:http://localhost:8080/api/v1}

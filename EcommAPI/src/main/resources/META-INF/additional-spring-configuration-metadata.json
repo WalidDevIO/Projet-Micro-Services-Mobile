@@ -1,0 +1,7 @@
+{"properties": [
+  {
+    "name": "auth.api.url",
+    "type": "java.lang.String",
+    "description": "Auth micro-service API URL"
+  }
+]}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/EcommAPI/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/EcommAPI/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/EcommAPI/src/test/java" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: io.github.openfeign:feign-okhttp:13.3" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.openfeign:feign-jackson:13.3" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.openfeign:feign-core:13.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-context:6.2.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-beans:6.2.11" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:4.12.0" level="project" />
+    <orderEntry type="library" name="Gradle: jakarta.ws.rs:jakarta.ws.rs-api:3.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.glassfish.jersey.core:jersey-server:3.1.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.glassfish.jersey.core:jersey-common:3.1.11" level="project" />
+    <orderEntry type="library" name="Gradle: jakarta.inject:jakarta.inject-api:2.0.1" level="project" />
+    <orderEntry type="module" module-name="EcommApi.main" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot:3.5.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-autoconfigure:3.5.6" level="project" />
+  </component>
+</module>
