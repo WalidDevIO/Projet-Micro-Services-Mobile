@@ -91,5 +91,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="TEST" name="Gradle: io.rest-assured:rest-assured:5.5.0" level="project" />
   </component>
 </module>
