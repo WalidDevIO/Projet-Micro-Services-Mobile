@@ -10,6 +10,22 @@ services:
     volumes:
       - ecomm_mariadb_data:/var/lib/mysql
       - ./conf/init.sql:/docker-entrypoint-initdb.d/init.sql
+  authapi:
+    build:
+      context: AuthAPI
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    env_file:
+      - conf/auth.env
+  ecommapi:
+    build:
+      context: EcommAPI
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8080
+    env_file:
+      - conf/ecomm.env
 
 volumes:
   ecomm_mariadb_data:

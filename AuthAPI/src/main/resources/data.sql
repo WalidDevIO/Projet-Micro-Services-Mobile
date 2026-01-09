@@ -8,18 +8,3 @@ CREATE TABLE ACCOUNT (
    FIRSTNAME VARCHAR(255),
    LASTNAME VARCHAR(255)
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-DELIMITER $$
-
-CREATE TRIGGER set_first_user_as_admin
-    BEFORE INSERT ON ACCOUNT
-    FOR EACH ROW
-BEGIN
-    DECLARE user_count INT;
-    SELECT COUNT(*) INTO user_count FROM ACCOUNT;
-    IF user_count = 0 THEN
-        SET NEW.ADMIN = 1;
-    END IF;
-END$$
-
-DELIMITER ;

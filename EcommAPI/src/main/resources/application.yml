@@ -2,17 +2,14 @@ spring:
   application:
     name: EcommAPI
   datasource:
-    url: jdbc:h2:mem:ecommdb;mode=oracle
-    username: ecomm
-    password: mmoce # Note: This password is not used yet and will never be use on production env, this is not git credential leak
-    driverClassName: org.h2.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
+    url: ${DB_URI:jdbc:mariadb://localhost:3306/ecomm}
+    username: ${DB_USER:root}
+    password: ${DB_PASS:rootpassword}
+    driverClassName: org.mariadb.jdbc.Driver
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
   cloud:
     compatibility-verifier:
       enabled: false

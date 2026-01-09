@@ -2,9 +2,9 @@ spring:
   application:
     name: AuthApi
   datasource:
-    url: jdbc:mariadb://localhost:3306/auth
-    username: root
-    password: rootpassword
+    url: ${DB_URI:jdbc:mariadb://localhost:3306/auth}
+    username: ${DB_USER:root}
+    password: ${DB_PASS:rootpassword}
     driverClassName: org.mariadb.jdbc.Driver
   sql:
     init:
