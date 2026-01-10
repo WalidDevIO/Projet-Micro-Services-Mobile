@@ -14,12 +14,16 @@ services:
       dockerfile: Dockerfile
     env_file:
       - conf/auth.env
+    depends_on:
+      - db
   ecommapi:
     build:
       context: EcommAPI
       dockerfile: Dockerfile
     env_file:
       - conf/ecomm.env
+    depends_on:
+      - db
   mobile-app:
     build:
       context: ecomm-mobile-app
