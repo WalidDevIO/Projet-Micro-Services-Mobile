@@ -1,6 +1,7 @@
 package com.example.ubo.ecommapi.business;
 
 import com.example.ubo.ecommapi.entity.CartItemEntity;
+import com.example.ubo.ecommapi.exceptions.FunctionalException;
 import com.example.ubo.ecommapi.mapper.CartItemMapper;
 import com.example.ubo.ecommapi.repository.ArticleRepository;
 import com.example.ubo.ecommapi.repository.CartItemRepository;
@@ -38,6 +39,9 @@ public class CartItemBusiness {
     }
 
     public CartItemEntity updateCartItem(CartItemEntity cartItem) {
+        if(cartItem.getId() == null || cartItemRepository.getCartItemById(cartItem.getId()) == null) {
+            throw new FunctionalException(404, "Item not found");
+        }
         return toEntity(cartItemRepository.updateCartItem(toDto(cartItem)));
     }
 

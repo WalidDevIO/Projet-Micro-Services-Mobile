@@ -1,9 +1,10 @@
 package com.example.ubo.ecommapi.business;
 
 import com.example.ubo.ecommapi.entity.ArticleEntity;
+import com.example.ubo.ecommapi.exceptions.FunctionalException;
 import com.example.ubo.ecommapi.mapper.ArticleMapper;
 import com.example.ubo.ecommapi.repository.ArticleRepository;
-import dto.ecommapi.Article;import jakarta.inject.Inject;
+import jakarta.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,6 +31,9 @@ public class ArticleBusiness {
     }
 
     public ArticleEntity updateArticle(ArticleEntity article) {
+        if(article.getId() == null || articleRepository.getArticleById(article.getId()) == null) {
+            throw new FunctionalException(404, "Article not found");
+        }
         return toEntity(articleRepository.updateArticle(toDto(article)));
     }
 

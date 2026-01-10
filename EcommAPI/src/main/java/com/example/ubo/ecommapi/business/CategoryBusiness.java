@@ -1,6 +1,7 @@
 package com.example.ubo.ecommapi.business;
 
 import com.example.ubo.ecommapi.entity.CategoryEntity;
+import com.example.ubo.ecommapi.exceptions.FunctionalException;
 import com.example.ubo.ecommapi.mapper.CategoryMapper;
 import com.example.ubo.ecommapi.repository.CategoryRepository;
 import jakarta.inject.Inject;
@@ -30,6 +31,9 @@ public class CategoryBusiness {
     }
 
     public CategoryEntity updateCategory(CategoryEntity category) {
+        if(category.getId() == null || categoryRepository.getCategoryById(category.getId()) == null) {
+            throw new FunctionalException(404, "Category not found");
+        }
         return toEntity(categoryRepository.updateCategory(toDto(category)));
     }
 
