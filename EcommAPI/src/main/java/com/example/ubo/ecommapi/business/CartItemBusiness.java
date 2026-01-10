@@ -26,6 +26,8 @@ public class CartItemBusiness {
     public CartItemEntity createCartItem(CartItemEntity cartItem) {
         var article = articleRepository.getArticleById(cartItem.getArticleId());
         if(article == null) return null;
+
+        //TODO: Check if a CartItem exist for this user and the same article then if it exists throw a FunctionalException
         cartItem.setPriceAtAdd(BigDecimal.ZERO); //TODO: Check if priceAtAdd have a real interest (fixed or dynamic pricing ?)
         return toEntity(cartItemRepository.addCartItem(toDto(cartItem)));
     }

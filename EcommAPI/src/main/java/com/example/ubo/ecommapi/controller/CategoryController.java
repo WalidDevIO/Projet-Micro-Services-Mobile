@@ -3,6 +3,7 @@ package com.example.ubo.ecommapi.controller;
 import com.example.ubo.ecommapi.business.CategoryBusiness;
 import com.example.ubo.ecommapi.entity.CategoryEntity;
 import com.example.ubo.ecommapi.filters.AdminRequired;
+import com.example.ubo.ecommapi.filters.AuthenticationRequired;
 import com.example.ubo.ecommapi.mapper.CategoryMapper;
 import dto.ecommapi.Category;
 import jakarta.ws.rs.*;
@@ -51,6 +52,7 @@ public class CategoryController {
     @Path("/admin/categories")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @AuthenticationRequired
     @AdminRequired
     public Response createCategory(Category category) {
         //Read POST request of CartItemController or ArticleController to understand this double mapping
@@ -62,6 +64,7 @@ public class CategoryController {
     @Path("/admin/categories/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @AuthenticationRequired
     @AdminRequired
     public Response updateCategory(@PathParam("id") String id, Category category) {
         CategoryEntity updatedCategory = this.categoryBusiness.updateCategory(toEntity(category));
@@ -70,6 +73,7 @@ public class CategoryController {
 
     @DELETE
     @Path("/admin/categories/{id}")
+    @AuthenticationRequired
     @AdminRequired
     public Response deleteCategory(@PathParam("id") String id) {
         boolean deleted = this.categoryBusiness.deleteCategory(id);

@@ -3,6 +3,7 @@ package com.example.ubo.ecommapi.controller;
 import com.example.ubo.ecommapi.business.ArticleBusiness;
 import com.example.ubo.ecommapi.entity.ArticleEntity;
 import com.example.ubo.ecommapi.filters.AdminRequired;
+import com.example.ubo.ecommapi.filters.AuthenticationRequired;
 import com.example.ubo.ecommapi.mapper.ArticleMapper;
 import dto.ecommapi.Article;
 import jakarta.ws.rs.*;
@@ -60,6 +61,7 @@ public class ArticleController {
     @Path("/admin/articles")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @AuthenticationRequired
     @AdminRequired
     public Response createArticle(Article article) {
         //I know there's useless double mapping, but the professor's instructions are the instructions
@@ -71,6 +73,7 @@ public class ArticleController {
     @Path("/admin/articles/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @AuthenticationRequired
     @AdminRequired
     public Response updateArticle(@PathParam("id") String id, Article article) {
         ArticleEntity updatedArticle = this.articleBusiness.updateArticle(toEntity(article));
@@ -79,6 +82,7 @@ public class ArticleController {
 
     @DELETE
     @Path("/admin/articles/{id}")
+    @AuthenticationRequired
     @AdminRequired
     public Response deleteArticle(@PathParam("id") String id) {
         boolean deleted = this.articleBusiness.deleteArticle(id);
