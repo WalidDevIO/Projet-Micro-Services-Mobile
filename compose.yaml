@@ -26,6 +26,20 @@ services:
       - 8081:8080
     env_file:
       - conf/ecomm.env
+  mobile-app:
+    build:
+      context: ecomm-mobile-app
+      dockerfile: Dockerfile
+    container_name: ecomm-mobile-app
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ecomm-mobile-app:/app
+      - /app/node_modules
+    depends_on:
+      - authapi
+      - ecommapi
+
 
 volumes:
   ecomm_mariadb_data:
