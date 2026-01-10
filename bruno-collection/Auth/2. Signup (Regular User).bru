@@ -1,0 +1,47 @@
+meta {
+  name: 2. Signup (Regular User)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{authUrl}}/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "waldo",
+    "password": "UserPass123!",
+    "email": "waldo@walidlab.dev",
+    "firstName": "Walid",
+    "lastName": "User"
+  }
+}
+
+tests {
+  test("Status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  
+  test("Response has success field", function() {
+    expect(res.body.success).to.be.true;
+  });
+  
+  test("User is created", function() {
+    expect(res.body.user).to.be.an('object');
+    expect(res.body.user.username).to.equal('waldo');
+  });
+}
+
+script:post-response {
+  if (res.status === 201) {
+    console.log("✅ Regular user created successfully");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

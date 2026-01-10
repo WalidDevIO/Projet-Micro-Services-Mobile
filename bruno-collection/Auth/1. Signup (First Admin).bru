@@ -1,0 +1,47 @@
+meta {
+  name: 1. Signup (First Admin)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{authUrl}}/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "admin",
+    "password": "AdminPass123!",
+    "email": "admin@walidlab.dev",
+    "firstName": "Walid",
+    "lastName": "EL OUAZIZI"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    console.log("✅ First admin user created successfully");
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Response has success field", function() {
+    expect(res.body.success).to.be.true;
+  });
+  
+  test("User is created", function() {
+    expect(res.body.user).to.be.an('object');
+    expect(res.body.user.username).to.equal('admin');
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

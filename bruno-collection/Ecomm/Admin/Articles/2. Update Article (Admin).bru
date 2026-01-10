@@ -1,0 +1,54 @@
+meta {
+  name: 2. Update Article (Admin)
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{ecommUrl}}/admin/articles/{{article-id}}
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authentication
+  value: {{admin-token}}
+  placement: header
+}
+
+body:json {
+  {
+    "id": "{{article-id}}",
+    "name": "iPhone 15 Pro Max",
+    "description": "Smartphone Apple dernière génération avec puce A17 Pro et écran 6.7 pouces",
+    "price": 1399.99,
+    "stock": 30,
+    "categoryId": "{{category-id}}",
+    "imageUrl": "https://example.com/images/iphone15pro.jpg"
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Article updated successfully", function() {
+    expect(res.body.name).to.equal('iPhone 15 Pro Max');
+    expect(res.body.price).to.equal(1399.99);
+    expect(res.body.stock).to.equal(30);
+  });
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Article updated:", res.body.name);
+    console.log("   New price:", res.body.price, "€");
+    console.log("   New stock:", res.body.stock);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

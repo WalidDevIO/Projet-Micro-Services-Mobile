@@ -2,5 +2,6 @@
 <project version="4">
   <component name="DataSourcePerFileMappings">
     <file url="file://$PROJECT_DIR$/AuthAPI/src/main/java/com/example/ubo/authapi/repository/UserRepository.java" value="9201588f-9262-44fb-88b1-a25e40f0ba4c" />
+    <file url="file://$PROJECT_DIR$/EcommAPI/src/main/java/com/example/ubo/ecommapi/repository/CartItemRepository.java" value="9201588f-9262-44fb-88b1-a25e40f0ba4c" />
   </component>
 </project>

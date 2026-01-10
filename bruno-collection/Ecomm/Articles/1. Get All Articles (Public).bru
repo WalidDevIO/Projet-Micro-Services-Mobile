@@ -1,0 +1,45 @@
+meta {
+  name: 1. Get All Articles (Public)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{ecommUrl}}/articles
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Response is an array", function() {
+    expect(res.body).to.be.an('array');
+  });
+  
+  test("Articles have required fields", function() {
+    if (res.body.length > 0) {
+      const article = res.body[0];
+      expect(article).to.have.property('id');
+      expect(article).to.have.property('name');
+      expect(article).to.have.property('price');
+      expect(article).to.have.property('stock');
+    }
+  });
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Found", res.body.length, "articles");
+    if (res.body.length > 0) {
+      console.log("First article:", res.body[0].name);
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

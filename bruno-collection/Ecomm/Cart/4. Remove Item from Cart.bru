@@ -1,0 +1,34 @@
+meta {
+  name: 4. Remove Item from Cart
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{ecommUrl}}/cart/{{cart-item-id}}
+  body: none
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authentication
+  value: {{auth-token}}
+  placement: header
+}
+
+tests {
+  test("Status is 204", function() {
+    expect(res.status).to.equal(204);
+  });
+}
+
+script:post-response {
+  if (res.status === 204) {
+    console.log("✅ Item removed from cart");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

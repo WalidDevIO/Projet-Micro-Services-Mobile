@@ -1,0 +1,52 @@
+meta {
+  name: 1. Get My Cart
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{ecommUrl}}/cart
+  body: none
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authentication
+  value: {{auth-token}}
+  placement: header
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Response is an array", function() {
+    expect(res.body).to.be.an('array');
+  });
+  
+  test("Cart items have required fields", function() {
+    if (res.body.length > 0) {
+      const item = res.body[0];
+      expect(item).to.have.property('id');
+      expect(item).to.have.property('articleId');
+      expect(item).to.have.property('quantity');
+      expect(item).to.have.property('priceAtAdd');
+    }
+  });
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Cart retrieved:", res.body.length, "items");
+    if (res.body.length > 0) {
+      const total = res.body.reduce((sum, item) => sum + (item.priceAtAdd * item.quantity), 0);
+      console.log("   Total value:", total.toFixed(2), "€");
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

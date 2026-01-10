@@ -1,0 +1,46 @@
+meta {
+  name: 2. Update Category (Admin)
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{ecommUrl}}/admin/categories/{{category-id}}
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authentication
+  value: {{admin-token}}
+  placement: header
+}
+
+body:json {
+  {
+    "id": "{{category-id}}",
+    "name": "Électronique & High-Tech",
+    "description": "Tous les produits électroniques, high-tech et accessoires"
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Category updated successfully", function() {
+    expect(res.body.name).to.equal('Électronique & High-Tech');
+  });
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Category updated:", res.body.name);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

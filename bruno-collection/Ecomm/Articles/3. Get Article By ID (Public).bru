@@ -1,0 +1,37 @@
+meta {
+  name: 3. Get Article By ID (Public)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{ecommUrl}}/articles/{{article-id}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Article has required fields", function() {
+    expect(res.body).to.have.property('id');
+    expect(res.body).to.have.property('name');
+    expect(res.body).to.have.property('price');
+    expect(res.body).to.have.property('stock');
+  });
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Article found:", res.body.name);
+    console.log("   Price:", res.body.price, "€");
+    console.log("   Stock:", res.body.stock);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

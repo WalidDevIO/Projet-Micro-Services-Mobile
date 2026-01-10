@@ -1,0 +1,52 @@
+meta {
+  name: 5. Check Token (Admin)
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{authUrl}}/verify-token
+  body: none
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authentication
+  value: {{admin-token}}
+  placement: header
+}
+
+script:post-response {
+  if (res.status === 200 && res.body.id) {
+    bru.setEnvVar("user-id", res.body.id);
+    console.log("✅ Admin token valid, user ID:", res.body.id);
+    console.log("✅ Admin status:", res.body.admin);
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Token is valid", function() {
+    expect(res.body.valid).to.be.true;
+  });
+  
+  test("Returns user ID", function() {
+    expect(res.body.id).to.be.a('string');
+  });
+  
+  test("Returns username", function() {
+    expect(res.body.username).to.equal('admin');
+  });
+  
+  test("Admin flag is true", function() {
+    expect(res.body.admin).to.be.true;
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

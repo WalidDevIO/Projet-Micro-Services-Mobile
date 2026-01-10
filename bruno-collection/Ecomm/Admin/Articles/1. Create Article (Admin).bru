@@ -1,0 +1,59 @@
+meta {
+  name: 1. Create Article (Admin)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{ecommUrl}}/admin/articles
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authentication
+  value: {{admin-token}}
+  placement: header
+}
+
+body:json {
+  {
+    "name": "iPhone 15 Pro",
+    "description": "Smartphone Apple dernière génération avec puce A17 Pro",
+    "price": 1199.99,
+    "stock": 50,
+    "categoryId": "{{category-id}}",
+    "imageUrl": "https://example.com/images/iphone15.jpg"
+  }
+}
+
+tests {
+  test("Status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  
+  test("Article created with ID", function() {
+    expect(res.body).to.have.property('id');
+    expect(res.body.id).to.be.a('string');
+  });
+  
+  test("Article has correct data", function() {
+    expect(res.body.name).to.equal('iPhone 15 Pro');
+    expect(res.body.price).to.equal(1199.99);
+    expect(res.body.stock).to.equal(50);
+  });
+}
+
+script:post-response {
+  if (res.status === 201 && res.body.id) {
+    bru.setEnvVar("article-id", res.body.id);
+    console.log("✅ Article created with ID:", res.body.id);
+    console.log("   Name:", res.body.name);
+    console.log("   Price:", res.body.price, "€");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

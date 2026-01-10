@@ -1,0 +1,40 @@
+meta {
+  name: 7. Logout
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{authUrl}}/logout
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{auth-token}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Logout successful", function() {
+    expect(res.body.success).to.be.true;
+  });
+  
+  test("Has confirmation message", function() {
+    expect(res.body.message).to.be.a('string');
+  });
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Logout successful:", res.body.message);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,46 @@
+meta {
+  name: 4. Signin (User)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{authUrl}}/signin
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "waldo",
+    "password": "UserPass123!"
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Response has token", function() {
+    expect(res.body.token).to.be.a('string');
+    expect(res.body.token.length).to.be.greaterThan(0);
+  });
+  
+  test("User data is present", function() {
+    expect(res.body.user).to.be.an('object');
+    expect(res.body.user.username).to.equal('waldo');
+  });
+}
+
+script:post-response {
+  if (res.status === 200 && res.body.token) {
+    bru.setEnvVar("auth-token", res.body.token);
+    console.log("✅ User token saved:", res.body.token.substring(0, 20) + "...");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

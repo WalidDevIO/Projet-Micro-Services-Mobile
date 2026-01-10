@@ -1,0 +1,47 @@
+meta {
+  name: 6. Check Token (User)
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{authUrl}}/verify-token
+  body: none
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authentication
+  value: {{auth-token}}
+  placement: header
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ User token valid");
+    console.log("✅ Admin status:", res.body.admin);
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Token is valid", function() {
+    expect(res.body.valid).to.be.true;
+  });
+  
+  test("Returns username", function() {
+    expect(res.body.username).to.equal('waldo');
+  });
+  
+  test("Admin flag is false", function() {
+    expect(res.body.admin).to.be.false;
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

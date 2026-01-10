@@ -1,0 +1,43 @@
+meta {
+  name: 1. Get All Categories (Public)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{ecommUrl}}/categories
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Response is an array", function() {
+    expect(res.body).to.be.an('array');
+  });
+  
+  test("Categories have required fields", function() {
+    if (res.body.length > 0) {
+      const category = res.body[0];
+      expect(category).to.have.property('id');
+      expect(category).to.have.property('name');
+    }
+  });
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Found", res.body.length, "categories");
+    if (res.body.length > 0) {
+      console.log("First category:", res.body[0].name);
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,45 @@
+meta {
+  name: 3. Update Cart Item Quantity
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{ecommUrl}}/cart/{{cart-item-id}}
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: Authentication
+  value: {{auth-token}}
+  placement: header
+}
+
+body:json {
+  {
+    "quantity": 5
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Quantity updated successfully", function() {
+    expect(res.body.quantity).to.equal(5);
+  });
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Cart item updated");
+    console.log("   New quantity:", res.body.quantity);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
