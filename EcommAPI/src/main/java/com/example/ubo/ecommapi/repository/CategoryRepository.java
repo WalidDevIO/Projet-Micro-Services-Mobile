@@ -2,8 +2,8 @@ package com.example.ubo.ecommapi.repository;
 
 import com.example.ubo.ecommapi.exceptions.FunctionalException;
 import dto.ecommapi.Category;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;import org.springframework.jdbc.support.KeyHolder;import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public class CategoryRepository {
     }
 
     private static final String SQL_INSERT_CATEGORY =
-            "INSERT INTO categories (ID, NAME, DESCRIPTION, CREATED_AT) VALUES (:id, :name, :description, :createdAt);";
+            "INSERT INTO categories (NAME, DESCRIPTION) VALUES (:name, :description);";
 
     private static final String SQL_SELECT_CATEGORY =
             "SELECT * FROM categories WHERE id = :id;";
@@ -36,12 +36,11 @@ public class CategoryRepository {
 
     public Category addCategory(Category category) {
         Map<String, Object> params = new HashMap<>();
-        params.put("id", category.getId() != null ? Integer.valueOf(category.getId()) : null);
         params.put("name", category.getName());
         params.put("description", category.getDescription());
-        params.put("createdAt", category.getCreatedAt() != null ? category.getCreatedAt() : new Timestamp(System.currentTimeMillis()));
-        jdbcTemplate.update(SQL_INSERT_CATEGORY, params);
-        return category;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(SQL_INSERT_CATEGORY, new MapSqlParameterSource(params), keyHolder);
+        return getCategoryById(String.valueOf(keyHolder.getKey().intValue()));
     }
 
     public Category getCategoryById(String id) {

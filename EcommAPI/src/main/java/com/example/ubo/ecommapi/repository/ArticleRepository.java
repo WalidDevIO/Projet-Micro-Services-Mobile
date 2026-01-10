@@ -2,11 +2,11 @@ package com.example.ubo.ecommapi.repository;
 
 import com.example.ubo.ecommapi.exceptions.FunctionalException;
 import dto.ecommapi.Article;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;import org.springframework.jdbc.support.KeyHolder;import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
+import java.time.OffsetDateTime;import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +20,8 @@ public class ArticleRepository {
     }
 
     private static final String SQL_INSERT_ARTICLE =
-            "INSERT INTO articles (ID, NAME, DESCRIPTION, PRICE, STOCK, CATEGORY_ID, IMAGE_URL, CREATED_AT, UPDATED_AT) " +
-                    "VALUES (:id, :name, :description, :price, :stock, :categoryId, :imageUrl, :createdAt, :updatedAt);";
+            "INSERT INTO articles (NAME, DESCRIPTION, PRICE, STOCK, CATEGORY_ID, IMAGE_URL) " +
+                    "VALUES (:name, :description, :price, :stock, :categoryId, :imageUrl);";
 
     private static final String SQL_SELECT_ARTICLE =
             "SELECT * FROM articles WHERE id = :id;";
@@ -41,17 +41,15 @@ public class ArticleRepository {
 
     public Article addArticle(Article article) {
         Map<String, Object> params = new HashMap<>();
-        params.put("id", article.getId() != null ? Integer.valueOf(article.getId()) : null);
         params.put("name", article.getName());
         params.put("description", article.getDescription());
         params.put("price", article.getPrice());
         params.put("stock", article.getStock());
-        params.put("categoryId", article.getCategoryId() != null ? Long.valueOf(article.getCategoryId()) : null);
+        params.put("categoryId", article.getCategoryId() != null ? Integer.valueOf(article.getCategoryId()) : null);
         params.put("imageUrl", article.getImageUrl());
-        params.put("createdAt", article.getCreatedAt() != null ? article.getCreatedAt() : new Timestamp(System.currentTimeMillis()));
-        params.put("updatedAt", article.getUpdatedAt() != null ? article.getUpdatedAt() : new Timestamp(System.currentTimeMillis()));
-        jdbcTemplate.update(SQL_INSERT_ARTICLE, params);
-        return article;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(SQL_INSERT_ARTICLE, new MapSqlParameterSource(params), keyHolder);
+        return getArticleById(String.valueOf(keyHolder.getKey().intValue()));
     }
 
     public Article getArticleById(String id) {

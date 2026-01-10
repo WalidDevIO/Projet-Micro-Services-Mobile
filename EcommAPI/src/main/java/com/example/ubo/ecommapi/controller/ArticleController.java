@@ -62,8 +62,9 @@ public class ArticleController {
     @Produces(MediaType.APPLICATION_JSON)
     @AdminRequired
     public Response createArticle(Article article) {
-        this.articleBusiness.createArticle(toEntity(article));
-        return Response.status(Response.Status.CREATED).entity(article).build();
+        //I know there's useless double mapping, but the professor's instructions are the instructions
+        var created = toDto(this.articleBusiness.createArticle(toEntity(article)));
+        return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
     @PUT

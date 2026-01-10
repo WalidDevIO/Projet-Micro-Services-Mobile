@@ -53,8 +53,9 @@ public class CategoryController {
     @Produces(MediaType.APPLICATION_JSON)
     @AdminRequired
     public Response createCategory(Category category) {
-        this.categoryBusiness.createCategory(toEntity(category));
-        return Response.status(Response.Status.CREATED).entity(category).build();
+        //Read POST request of CartItemController or ArticleController to understand this double mapping
+        var created = toDto(this.categoryBusiness.createCategory(toEntity(category)));
+        return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
     @PUT

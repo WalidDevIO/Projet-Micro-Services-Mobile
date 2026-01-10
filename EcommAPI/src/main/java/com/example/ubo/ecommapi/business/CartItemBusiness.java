@@ -17,8 +17,8 @@ public class CartItemBusiness {
     @Inject
     private CartItemRepository cartItemRepository;
 
-    public void createCartItem(CartItemEntity cartItem) {
-        cartItemRepository.addCartItem(toDto(cartItem));
+    public CartItemEntity createCartItem(CartItemEntity cartItem) {
+        return toEntity(cartItemRepository.addCartItem(toDto(cartItem)));
     }
 
     public CartItemEntity getCartItemById(String id) {

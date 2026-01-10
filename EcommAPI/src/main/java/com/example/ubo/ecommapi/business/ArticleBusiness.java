@@ -3,7 +3,7 @@ package com.example.ubo.ecommapi.business;
 import com.example.ubo.ecommapi.entity.ArticleEntity;
 import com.example.ubo.ecommapi.mapper.ArticleMapper;
 import com.example.ubo.ecommapi.repository.ArticleRepository;
-import jakarta.inject.Inject;
+import dto.ecommapi.Article;import jakarta.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,8 +17,8 @@ public class ArticleBusiness {
     @Inject
     private ArticleRepository articleRepository;
 
-    public void createArticle(ArticleEntity article) {
-        articleRepository.addArticle(toDto(article));
+    public ArticleEntity createArticle(ArticleEntity article) {
+        return toEntity(articleRepository.addArticle(toDto(article)));
     }
 
     public ArticleEntity getArticleById(String id) {

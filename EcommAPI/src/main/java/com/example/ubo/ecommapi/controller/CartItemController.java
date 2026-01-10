@@ -47,8 +47,9 @@ public class CartItemController {
         String userId = securityContext.getUserPrincipal().getName();
         cartItem.setUserId(userId);
 
-        this.cartItemBusiness.createCartItem(toEntity(cartItem));
-        return Response.status(Response.Status.CREATED).entity(cartItem).build();
+        //Another time instructions are instructions
+        var created = toDto(this.cartItemBusiness.createCartItem(toEntity(cartItem)));
+        return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
     @PUT

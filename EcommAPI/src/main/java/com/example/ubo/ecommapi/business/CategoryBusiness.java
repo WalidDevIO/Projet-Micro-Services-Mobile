@@ -17,8 +17,8 @@ public class CategoryBusiness {
     @Inject
     private CategoryRepository categoryRepository;
 
-    public void createCategory(CategoryEntity category) {
-        categoryRepository.addCategory(toDto(category));
+    public CategoryEntity createCategory(CategoryEntity category) {
+        return toEntity(categoryRepository.addCategory(toDto(category)));
     }
 
     public CategoryEntity getCategoryById(String id) {

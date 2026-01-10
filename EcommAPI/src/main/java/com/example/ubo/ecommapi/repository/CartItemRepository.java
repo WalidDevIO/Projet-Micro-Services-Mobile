@@ -2,8 +2,8 @@ package com.example.ubo.ecommapi.repository;
 
 import com.example.ubo.ecommapi.exceptions.FunctionalException;
 import dto.ecommapi.CartItem;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;import org.springframework.jdbc.support.KeyHolder;import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -21,8 +21,8 @@ public class CartItemRepository {
     }
 
     private static final String SQL_INSERT_CART_ITEM =
-            "INSERT INTO cart_items (ID, USER_ID, ARTICLE_ID, QUANTITY, PRICE_AT_ADD, CREATED_AT) " +
-                    "VALUES (:id, :userId, :articleId, :quantity, :priceAtAdd, :createdAt);";
+            "INSERT INTO cart_items (USER_ID, ARTICLE_ID, QUANTITY, PRICE_AT_ADD) " +
+                    "VALUES (:userId, :articleId, :quantity, :priceAtAdd);";
 
     private static final String SQL_SELECT_CART_ITEM =
             "SELECT * FROM cart_items WHERE id = :id;";
@@ -44,14 +44,13 @@ public class CartItemRepository {
 
     public CartItem addCartItem(CartItem cartItem) {
         Map<String, Object> params = new HashMap<>();
-        params.put("id", cartItem.getId() != null ? Integer.valueOf(cartItem.getId()) : null);
         params.put("userId", Long.valueOf(cartItem.getUserId()));
         params.put("articleId", Long.valueOf(cartItem.getArticleId()));
         params.put("quantity", cartItem.getQuantity());
         params.put("priceAtAdd", cartItem.getPriceAtAdd());
-        params.put("createdAt", cartItem.getCreatedAt() != null ? cartItem.getCreatedAt() : new Timestamp(System.currentTimeMillis()));
-        jdbcTemplate.update(SQL_INSERT_CART_ITEM, params);
-        return cartItem;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(SQL_INSERT_CART_ITEM, new MapSqlParameterSource(params), keyHolder);
+        return getCartItemById(String.valueOf(keyHolder.getKey().intValue()));
     }
 
     public CartItem getCartItemById(String id) {
