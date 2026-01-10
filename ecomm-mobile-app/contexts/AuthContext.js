@@ -18,11 +18,32 @@ export const AuthProvider = ({ children }) => {
   const loadStoredAuth = async () => {
     try {
       const storedToken = await AsyncStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
-      const storedUser = await AsyncStorage.getItem(STORAGE_KEYS.USER_DATA);
 
-      if (storedToken && storedUser) {
-        setToken(storedToken);
-        setUser(new User(JSON.parse(storedUser)));
+      if (storedToken) {
+        // Verify token validity and get latest user data including admin status
+        try {
+          // Temporarily set token for the request if not already set in interceptor
+          // But interceptor reads from storage so it should be fine.
+          const verifyResponse = await authService.checkToken();
+          if (verifyResponse.valid) {
+            setToken(storedToken);
+            // Construct user object from verify response
+            const userData = {
+              id: verifyResponse.id,
+              username: verifyResponse.username,
+              admin: verifyResponse.admin
+            };
+            setUser(new User(userData));
+            // Update stored user data
+            await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+          } else {
+            // Token invalid
+            await logout();
+          }
+        } catch (verifyError) {
+          console.log('Token verification failed:', verifyError);
+          await logout();
+        }
       }
     } catch (error) {
       console.error('Error loading auth:', error);
@@ -34,23 +55,50 @@ export const AuthProvider = ({ children }) => {
   const signin = async (username, password) => {
     try {
       const response = await authService.signin(username, password);
-      
+
       if (response.success && response.token) {
         await AsyncStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.token);
-        await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
-        
-        setToken(response.token);
-        setUser(new User(response.user));
-        
-        return { success: true };
+
+        // Now fetch full user details including admin status
+        try {
+          // Ensure the token is available for the next request
+          // Note: interceptor reads from AsyncStorage, so it should be available immediately
+
+          const verifyResponse = await authService.checkToken();
+
+          let userData = response.user;
+          if (verifyResponse.valid) {
+            userData = {
+              ...response.user,
+              id: verifyResponse.id, // Ensure we have the ID
+              admin: verifyResponse.admin
+            };
+          }
+
+          await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+
+          setToken(response.token);
+          setUser(new User(userData));
+
+          return { success: true };
+        } catch (error) {
+          console.error('Error fetching admin status:', error);
+          // Fallback to basic user data if verification fails (shouldn't happen if login succeeded)
+          // But treating as success might be risky if admin status is crucial. 
+          // Let's assume valid login but maybe network error on verify.
+          await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(response.user));
+          setToken(response.token);
+          setUser(new User(response.user));
+          return { success: true };
+        }
       }
-      
+
       return { success: false, message: 'Invalid credentials' };
     } catch (error) {
       console.error('Signin error:', error);
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Connection failed' 
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Connection failed'
       };
     }
   };
@@ -58,17 +106,17 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     try {
       const response = await authService.signup(userData);
-      
+
       if (response.success) {
         return { success: true, message: 'Account created successfully' };
       }
-      
+
       return { success: false, message: 'Signup failed' };
     } catch (error) {
       console.error('Signup error:', error);
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Signup failed' 
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Signup failed'
       };
     }
   };

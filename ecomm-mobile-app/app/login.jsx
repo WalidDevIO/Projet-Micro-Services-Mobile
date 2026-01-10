@@ -8,7 +8,6 @@ import {
   Text,
   TouchableOpacity,
   StatusBar,
-  Dimensions,
 } from 'react-native';
 import { TextInput, Button, ActivityIndicator } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,8 +15,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { COLORS, TEXTS, SPACING, BORDER_RADIUS, FONT_SIZES, SHADOWS } from '../constants/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-const { height } = Dimensions.get('window');
 
 export default function LoginScreen() {
   const { signin } = useAuth();
@@ -100,6 +97,7 @@ export default function LoginScreen() {
                 style={styles.input}
                 autoCapitalize="none"
                 disabled={loading}
+                textColor="#000000"
                 left={<TextInput.Icon icon="account" />}
                 outlineColor={COLORS.border}
                 activeOutlineColor={COLORS.primary}
@@ -114,6 +112,7 @@ export default function LoginScreen() {
                 secureTextEntry={secureTextEntry}
                 style={styles.input}
                 disabled={loading}
+                textColor="#000000"
                 left={<TextInput.Icon icon="lock" />}
                 right={
                   <TextInput.Icon

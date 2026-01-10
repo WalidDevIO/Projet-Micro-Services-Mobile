@@ -9,6 +9,10 @@ export const COLORS = {
     primaryDark: '#5A52D5',
     primaryLight: '#8B85FF',
 
+    // Secondary colors
+    secondary: '#0EA5E9',
+    secondaryLight: '#E0F2FE',
+
     // Accent colors
     accent: '#00D9FF',
     accentDark: '#00B8D9',
@@ -109,6 +113,29 @@ export const SHADOWS = {
 
 // French translations
 export const TEXTS = {
+    admin: {
+        dashboard: 'Administration',
+        manageCategories: 'Gérer les catégories',
+        manageArticles: 'Gérer les articles',
+        createCategory: 'Créer une catégorie',
+        editCategory: 'Modifier la catégorie',
+        createArticle: 'Créer un article',
+        editArticle: 'Modifier l\'article',
+        name: 'Nom',
+        description: 'Description',
+        price: 'Prix',
+        stock: 'Stock',
+        category: 'Catégorie',
+        imageUrl: 'URL de l\'image',
+        actions: 'Actions',
+        save: 'Enregistrer',
+        delete: 'Supprimer',
+        confirmDeleteTitle: 'Confirmer la suppression',
+        confirmDeleteMessage: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+        cancel: 'Annuler',
+        success: 'Succès',
+        error: 'Erreur',
+    },
     // Navigation
     nav: {
         articles: 'Articles',

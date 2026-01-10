@@ -135,6 +135,21 @@ export default function ProfileScreen() {
 
       {/* Logout Button */}
       <View style={styles.section}>
+        {user?.isAdmin && (
+          <TouchableOpacity style={styles.adminButton} onPress={() => router.push('/admin/dashboard')}>
+            <LinearGradient
+              colors={COLORS.gradientSecondary}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.adminButtonGradient}
+            >
+              <MaterialCommunityIcons name="shield-account" size={24} color={COLORS.textOnPrimary} />
+              <Text style={styles.adminButtonText}>{TEXTS.admin.dashboard}</Text>
+              <MaterialCommunityIcons name="chevron-right" size={20} color={COLORS.textOnPrimary} style={styles.adminArrow} />
+            </LinearGradient>
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <LinearGradient
             colors={COLORS.gradientDanger}
@@ -284,6 +299,28 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.sm,
     color: COLORS.textSecondary,
     marginTop: 2,
+  },
+  adminButton: {
+    borderRadius: BORDER_RADIUS.md,
+    overflow: 'hidden',
+    marginBottom: SPACING.md,
+    ...SHADOWS.md,
+  },
+  adminButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    gap: SPACING.md,
+  },
+  adminButtonText: {
+    flex: 1,
+    color: COLORS.textOnPrimary,
+    fontSize: FONT_SIZES.lg,
+    fontWeight: '600',
+  },
+  adminArrow: {
+    opacity: 0.8,
   },
   logoutButton: {
     borderRadius: BORDER_RADIUS.md,

@@ -47,7 +47,7 @@ export const authService = {
   },
 
   async checkToken() {
-    const response = await authApiClient.get('/check');
+    const response = await authApiClient.get('/verify-token');
     return response.data;
   },
 

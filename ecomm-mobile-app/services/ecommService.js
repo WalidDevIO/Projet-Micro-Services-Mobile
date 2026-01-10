@@ -42,6 +42,20 @@ export const categoryService = {
     const response = await ecommApiClient.get(`/categories/${id}`);
     return response.data;
   },
+
+  async create(data) {
+    const response = await ecommApiClient.post('/admin/categories', data);
+    return response.data;
+  },
+
+  async update(id, data) {
+    const response = await ecommApiClient.put(`/admin/categories/${id}`, { ...data, id: id.toString() });
+    return response.data;
+  },
+
+  async delete(id) {
+    await ecommApiClient.delete(`/admin/categories/${id}`);
+  }
 };
 
 export const articleService = {
@@ -55,6 +69,20 @@ export const articleService = {
     const response = await ecommApiClient.get(`/articles/${id}`);
     return response.data;
   },
+
+  async create(data) {
+    const response = await ecommApiClient.post('/admin/articles', data);
+    return response.data;
+  },
+
+  async update(id, data) {
+    const response = await ecommApiClient.put(`/admin/articles/${id}`, { ...data, id: id.toString() });
+    return response.data;
+  },
+
+  async delete(id) {
+    await ecommApiClient.delete(`/admin/articles/${id}`);
+  }
 };
 
 export const cartService = {
