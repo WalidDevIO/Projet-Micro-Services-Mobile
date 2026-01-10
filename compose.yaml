@@ -10,6 +10,7 @@ services:
     volumes:
       - ecomm_mariadb_data:/var/lib/mysql
       - ./conf/init.sql:/docker-entrypoint-initdb.d/init.sql
+
   authapi:
     build:
       context: AuthAPI
@@ -18,6 +19,9 @@ services:
       - 8080:8080
     env_file:
       - conf/auth.env
+    depends_on:
+      - db
+      
   ecommapi:
     build:
       context: EcommAPI
@@ -26,20 +30,8 @@ services:
       - 8081:8080
     env_file:
       - conf/ecomm.env
-  mobile-app:
-    build:
-      context: ecomm-mobile-app
-      dockerfile: Dockerfile
-    container_name: ecomm-mobile-app
-    stdin_open: true
-    tty: true
-    volumes:
-      - ./ecomm-mobile-app:/app
-      - /app/node_modules
     depends_on:
-      - authapi
-      - ecommapi
-
+      - db
 
 volumes:
   ecomm_mariadb_data:

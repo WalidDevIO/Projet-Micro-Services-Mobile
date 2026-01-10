@@ -33,10 +33,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "authApiUrl": "${AUTH_API_URL}",
-      "ecommApiUrl": "${ECOMM_API_URL}"
     }
   }
 }

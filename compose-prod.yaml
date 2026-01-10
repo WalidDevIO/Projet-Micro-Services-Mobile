@@ -1,0 +1,63 @@
+services:
+  db:
+    image: mariadb:latest
+    container_name: ecomm-mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ecomm_mariadb_data:/var/lib/mysql
+      - ./conf/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ecomm-network
+
+  authapi:
+    build:
+      context: AuthAPI
+      dockerfile: Dockerfile
+    env_file:
+      - conf/auth.env
+    depends_on:
+      - db
+    labels:
+      - traefik.docker.network=dokploy-network
+    networks:
+      - ecomm-network
+
+  ecommapi:
+    build:
+      context: EcommAPI
+      dockerfile: Dockerfile
+    env_file:
+      - conf/ecomm.env
+    depends_on:
+      - db
+    labels:
+      - traefik.docker.network=dokploy-network
+    networks:
+      - ecomm-network
+
+  mobile-app:
+    build:
+      context: ecomm-mobile-app
+      dockerfile: Dockerfile
+    container_name: ecomm-mobile-app
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ecomm-mobile-app:/app
+      - /app/node_modules
+    depends_on:
+      - authapi
+      - ecommapi
+    environment:
+      - EXPO_PUBLIC_ECOMM_API_URL=${ECOMM_API_URL}
+      - EXPO_PUBLIC_AUTH_API_URL=${AUTH_API_URL}
+      - REACT_NATIVE_PACKAGER_HOSTNAME=${REACT_NATIVE_PACKAGER_HOSTNAME}
+
+volumes:
+  ecomm_mariadb_data:
+
+networks:
+  ecomm-network: 
+    driver: bridge
