@@ -2,11 +2,15 @@ package com.example.ubo.ecommapi.repository;
 
 import com.example.ubo.ecommapi.exceptions.FunctionalException;
 import dto.ecommapi.Article;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;import org.springframework.jdbc.support.KeyHolder;import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.time.OffsetDateTime;import java.util.HashMap;
+import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,7 +103,7 @@ public class ArticleRepository {
         params.put("imageUrl", article.getImageUrl());
         params.put("updatedAt", new Timestamp(System.currentTimeMillis()));
         jdbcTemplate.update(SQL_UPDATE_ARTICLE, params);
-        return article;
+        return getArticleById(article.getId());
     }
 
     public List<Article> getAllArticles() {

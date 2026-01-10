@@ -2,8 +2,11 @@ package com.example.ubo.ecommapi.repository;
 
 import com.example.ubo.ecommapi.exceptions.FunctionalException;
 import dto.ecommapi.Category;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;import org.springframework.jdbc.support.KeyHolder;import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -79,7 +82,7 @@ public class CategoryRepository {
         params.put("name", category.getName());
         params.put("description", category.getDescription());
         jdbcTemplate.update(SQL_UPDATE_CATEGORY, params);
-        return category;
+        return getCategoryById(category.getId());
     }
 
     public List<Category> getAllCategories() {

@@ -90,7 +90,7 @@ public class CartItemRepository {
         params.put("id", cartItem.getId() != null ? Integer.valueOf(cartItem.getId()) : null);
         params.put("quantity", cartItem.getQuantity());
         jdbcTemplate.update(SQL_UPDATE_CART_ITEM, params);
-        return cartItem;
+        return getCartItemById(cartItem.getId());
     }
 
     public List<CartItem> getCartItemsByUserId(String userId) {
