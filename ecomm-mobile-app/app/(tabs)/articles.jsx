@@ -97,7 +97,7 @@ const ArticlesScreen = observer(() => {
           <View>
             <Text style={styles.headerTitle}>{TEXTS.articles.title}</Text>
             <Text style={styles.headerSubtitle}>
-              {viewModel.filteredArticles.length} {TEXTS.articles.title.toLowerCase()}
+              {viewModel.filteredArticles.length} {TEXTS.articles.itemName}{viewModel.filteredArticles.length > 1 ? 's' : ''}
             </Text>
           </View>
 

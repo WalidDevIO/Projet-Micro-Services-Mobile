@@ -136,6 +136,7 @@ export const TEXTS = {
     // Articles
     articles: {
         title: 'Nos Produits',
+        itemName: 'Produit',
         search: 'Rechercher...',
         all: 'Tout',
         filters: 'Filtres',
