@@ -8,6 +8,7 @@ services:
     volumes:
       - ecomm_mariadb_data:/var/lib/mysql
       - ./conf/init.sql:/docker-entrypoint-initdb.d/init.sql
+  
   authapi:
     build:
       context: AuthAPI
@@ -16,6 +17,7 @@ services:
       - conf/auth.env
     depends_on:
       - db
+  
   ecommapi:
     build:
       context: EcommAPI
@@ -24,6 +26,7 @@ services:
       - conf/ecomm.env
     depends_on:
       - db
+  
   mobile-app:
     build:
       context: ecomm-mobile-app
@@ -38,6 +41,10 @@ services:
       - authapi
       - ecommapi
 
-
 volumes:
   ecomm_mariadb_data:
+
+networks:
+  default:
+    name: ecomm-network
+    driver: bridge
