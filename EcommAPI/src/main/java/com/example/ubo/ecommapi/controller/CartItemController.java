@@ -5,6 +5,7 @@ import com.example.ubo.ecommapi.entity.CartItemEntity;
 import com.example.ubo.ecommapi.filters.AuthenticationRequired;
 import com.example.ubo.ecommapi.mapper.CartItemMapper;
 import dto.ecommapi.CartItem;
+import dto.ecommapi.Error;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -49,7 +50,11 @@ public class CartItemController {
 
         //Another time instructions are instructions
         var created = toDto(this.cartItemBusiness.createCartItem(toEntity(cartItem)));
-        return Response.status(Response.Status.CREATED).entity(created).build();
+        return created != null
+                ? Response.status(Response.Status.CREATED).entity(created).build()
+                : Response.status(Response.Status.NOT_FOUND).entity(
+                        new Error().code(404).message("Article not found.")
+                ).build();
     }
 
     @PUT

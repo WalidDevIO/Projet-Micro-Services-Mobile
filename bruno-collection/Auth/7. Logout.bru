@@ -7,11 +7,19 @@ meta {
 delete {
   url: {{authUrl}}/logout
   body: none
-  auth: bearer
+  auth: apikey
 }
 
-auth:bearer {
-  token: {{auth-token}}
+auth:apikey {
+  key: Authentication
+  value: {{auth-token}}
+  placement: header
+}
+
+script:post-response {
+  if (res.status === 200) {
+    console.log("✅ Logout successful:", res.body.message);
+  }
 }
 
 tests {
@@ -26,12 +34,6 @@ tests {
   test("Has confirmation message", function() {
     expect(res.body.message).to.be.a('string');
   });
-}
-
-script:post-response {
-  if (res.status === 200) {
-    console.log("✅ Logout successful:", res.body.message);
-  }
 }
 
 settings {

@@ -2,10 +2,12 @@ package com.example.ubo.ecommapi.business;
 
 import com.example.ubo.ecommapi.entity.CartItemEntity;
 import com.example.ubo.ecommapi.mapper.CartItemMapper;
+import com.example.ubo.ecommapi.repository.ArticleRepository;
 import com.example.ubo.ecommapi.repository.CartItemRepository;
 import jakarta.inject.Inject;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.example.ubo.ecommapi.mapper.CartItemMapper.toDto;
@@ -17,7 +19,13 @@ public class CartItemBusiness {
     @Inject
     private CartItemRepository cartItemRepository;
 
+    @Inject
+    private ArticleRepository articleRepository;
+
     public CartItemEntity createCartItem(CartItemEntity cartItem) {
+        var article = articleRepository.getArticleById(cartItem.getArticleId());
+        if(article == null) return null;
+        cartItem.setPriceAtAdd(BigDecimal.ZERO); //TODO: Check if priceAtAdd have a real interest (fixed or dynamic pricing ?)
         return toEntity(cartItemRepository.addCartItem(toDto(cartItem)));
     }
 

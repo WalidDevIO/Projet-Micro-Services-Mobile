@@ -31,7 +31,7 @@ public class CartItemRepository {
             "DELETE FROM cart_items WHERE id = :id;";
 
     private static final String SQL_UPDATE_CART_ITEM =
-            "UPDATE cart_items SET QUANTITY = :quantity, PRICE_AT_ADD = :priceAtAdd WHERE id = :id;";
+            "UPDATE cart_items SET QUANTITY = :quantity WHERE id = :id;";
 
     private static final String SQL_SELECT_CART_ITEMS_BY_USER =
             "SELECT * FROM cart_items WHERE user_id = :userId;";
@@ -89,7 +89,6 @@ public class CartItemRepository {
         Map<String, Object> params = new HashMap<>();
         params.put("id", cartItem.getId() != null ? Integer.valueOf(cartItem.getId()) : null);
         params.put("quantity", cartItem.getQuantity());
-        params.put("priceAtAdd", cartItem.getPriceAtAdd());
         jdbcTemplate.update(SQL_UPDATE_CART_ITEM, params);
         return cartItem;
     }
