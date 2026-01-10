@@ -44,26 +44,16 @@ bruno-collection/
 ## 🚀 Configuration
 
 ### Prérequis
-1. Lancer la base de données MariaDB :
+Lancer la stack Docker :
    ```bash
-   docker compose up -d
-   ```
-
-2. Lancer AuthAPI (port 8080) :
-   ```bash
-   ./gradlew :AuthApi:bootRun
-   ```
-
-3. Lancer EcommAPI (port 8081) :
-   ```bash
-   ./gradlew :EcommAPI:bootRun
+   docker compose up -d --build
    ```
 
 ### Variables d'environnement
 Les variables suivantes sont définies dans `environments/Local.bru` :
 
 - `authUrl`: http://localhost:8080/api/v1
-- `ecommUrl`: http://localhost:8081/api
+- `ecommUrl`: http://localhost:8081/api/v1
 - `auth-token`: Token JWT de l'utilisateur normal
 - `admin-token`: Token JWT de l'administrateur
 - `user-id`: ID de l'utilisateur

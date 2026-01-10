@@ -77,10 +77,10 @@ public class UserController {
                 .status(409)
                 .entity(new ErrorResponse()
                     .code("AUTH_002")
-                    .message("Nom d'utilisateur déjà pris.")
+                    .message("Nom d'utilisateur ou email déjà utilisé.")
                 ).build();
         }
-        return Response.ok(registerResponse).build();
+        return Response.status(201).entity(registerResponse).build();
     }
     
 }

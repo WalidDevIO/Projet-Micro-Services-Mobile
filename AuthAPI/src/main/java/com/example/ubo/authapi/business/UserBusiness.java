@@ -59,9 +59,12 @@ public class UserBusiness {
     }
 
     public RegisterResponse register(RegisterRequest registerRequest) {
-        UserEntity userEntity = toEntity(userRepository.getAccountByUsername(registerRequest.getUsername()));
+        UserRepositoryDto userDto = userRepository.getAccountByUsername(registerRequest.getUsername());
+        if(userDto == null) {
+            userDto = userRepository.getAccountByEmail(registerRequest.getEmail());
+        }
         RegisterResponse response = new RegisterResponse();
-        if (userEntity == null) {
+        if (userDto == null) {
             UserEntity newUser = new UserEntity();
             newUser.setUsername(registerRequest.getUsername());
             newUser.setEmail(registerRequest.getEmail());
