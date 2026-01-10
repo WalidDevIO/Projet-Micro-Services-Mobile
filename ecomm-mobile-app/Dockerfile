@@ -2,6 +2,6 @@ FROM node:18-alpine
 RUN npm install -g expo-cli
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 COPY . .
 CMD ["npx", "expo", "start", "--tunnel"]
