@@ -54,6 +54,7 @@ services:
       - EXPO_PUBLIC_ECOMM_API_URL=${ECOMM_API_URL}
       - EXPO_PUBLIC_AUTH_API_URL=${AUTH_API_URL}
       - REACT_NATIVE_PACKAGER_HOSTNAME=${REACT_NATIVE_PACKAGER_HOSTNAME}
+    command: 443
 
 volumes:
   ecomm_mariadb_data:
