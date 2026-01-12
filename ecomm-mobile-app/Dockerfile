@@ -4,4 +4,5 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 COPY . .
-CMD ["npx", "expo", "start", "--non-interactive", "--port", "80"]
+ENTRYPOINT ["npx", "expo", "start", "--non-interactive", "--port"]
+CMD ["80"]
