@@ -27,7 +27,7 @@ Développer une application mobile e-commerce permettant de consulter un catalog
 ### 2.3 Technologies
 - **Frontend** : React Native (Expo) - Architecture MVVM
 - **Backend** : Spring Boot + Jersey (JAX-RS) - 2 microservices
-- **Base de données** : PostgreSQL
+- **Base de données** : MariaDB
 - **Authentification** : JWT avec 3 niveaux (Guest, Client, Admin)
 - **Déploiement** : Docker + CI Pipeline
 
@@ -43,7 +43,7 @@ Développer une application mobile e-commerce permettant de consulter un catalog
 │  GUEST (Visiteur)                              │
 │  ├─ Consulter catalogue                        │
 │  ├─ Rechercher articles                        │
-│  └─ Filtrer par catégorie                      │
+│  └─ Filtrer par catégorie/prix/stock           │
 │                                                │
 │  CLIENT (Utilisateur connecté)                 │
 │  ├─ S'inscrire / Se connecter                  │
@@ -78,18 +78,18 @@ Développer une application mobile e-commerce permettant de consulter un catalog
      └────────┬────────┘
               ▼
     ┌──────────────────┐
-    │   PostgreSQL     │
+    │     MariaDB      │
     └──────────────────┘
 ```
 
 ### Microservices
 
-**AuthAPI (Port 8080)** :
+**AuthAPI** :
 - Inscription / Connexion
 - Génération et validation JWT
 - Gestion profils utilisateurs
 
-**EcommAPI (Port 8081)** :
+**EcommAPI** :
 - CRUD Articles et Catégories
 - Gestion panier
 - Validation JWT via AuthAPI (Feign Client)
@@ -125,17 +125,20 @@ View <--> ViewModel <--> Model
   └── profile (Protected - Client)
 
 /admin (Protected - Admin)
-  ├── articles
-  └── categories
+  ├── articles/
+  ├── categories/
+  └── dashboard
 
 /login (Public)
+
+/index (-> /(tabs)/articles)
 ```
 
 ---
 
 ## 6. Modélisation de la base de données
 
-### 6.1 Schéma ERD
+### 6.1 Schéma BDD
 
 ```
 ┌─────────┐         ┌─────────────┐         ┌──────────┐
@@ -163,11 +166,11 @@ View <--> ViewModel <--> Model
 **users** : Utilisateurs (email, password, role)  
 **categories** : Catégories de produits  
 **articles** : Produits (nom, prix, stock, category_id, image_url)  
-**cart_items** : Panier (user_id, article_id, quantity, price_at_add)
+**cart_items** : Panier (user_id, article_id, quantity)
 
 ### 6.3 Contraintes clés
 
-- **users** : email UNIQUE, role IN ('CLIENT', 'ADMIN')
+- **users** : email UNIQUE
 - **articles** : price ≥ 0, stock ≥ 0
 - **cart_items** : UNIQUE(user_id, article_id), quantity > 0
 - **Relations** : 
